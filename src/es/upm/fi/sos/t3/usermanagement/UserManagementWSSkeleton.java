@@ -21,6 +21,8 @@ public class UserManagementWSSkeleton {
 
 	) {
 		// TODO : fill this with the necessary business logic
+		// Obtener la sesión
+		// Cerrarla
 
 	}
 
@@ -31,12 +33,18 @@ public class UserManagementWSSkeleton {
 	 * @return response
 	 */
 
-	public Response login(
-			User user) {
+	public Response login(User user) {
 		// TODO : fill this with the necessary business logic
+		// Ver que user existe (¿CÓMO?)
+		// Crear la sesión (ContextSession creo)
+		// Devolver true en la Response
 		throw new java.lang.UnsupportedOperationException("Please implement "
 				+ this.getClass().getName() + "#login");
 	}
+
+	/*
+	 * Los siguientes métodos tendrán que usar getSession() o algo parecido
+	 */
 
 	/**
 	 * Auto generated method signature
@@ -45,9 +53,11 @@ public class UserManagementWSSkeleton {
 	 * @return response2
 	 */
 
-	public Response addUser(
-			User user1) {
+	public Response addUser(User user1) {
 		// TODO : fill this with the necessary business logic
+		// Ver que la sesión es de superuser
+		// Añadirlo
+		// true
 		throw new java.lang.UnsupportedOperationException("Please implement "
 				+ this.getClass().getName() + "#addUser");
 	}
@@ -59,9 +69,12 @@ public class UserManagementWSSkeleton {
 	 * @return response3
 	 */
 
-	public Response changePassword(
-			PasswordPair passwordPair) {
+	public Response changePassword(PasswordPair passwordPair) {
 		// TODO : fill this with the necessary business logic
+		// Obtener User al que pertenece la sesión actual
+		// Ver que la pswd actual coincide con la primera del pair
+		// Cambiarla
+		// True
 		throw new java.lang.UnsupportedOperationException("Please implement "
 				+ this.getClass().getName() + "#changePassword");
 	}
@@ -73,9 +86,12 @@ public class UserManagementWSSkeleton {
 	 * @return response4
 	 */
 
-	public Response removeUser(
-			Username username) {
+	public Response removeUser(Username username) {
 		// TODO : fill this with the necessary business logic
+		// Ver que la sesión es de superuser
+		// Ver que un user con username existe
+		// Borrar ese User
+		// True
 		throw new java.lang.UnsupportedOperationException("Please implement "
 				+ this.getClass().getName() + "#removeUser");
 	}
