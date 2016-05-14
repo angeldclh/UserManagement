@@ -31,8 +31,8 @@ public class UserManagementWSSkeleton {
 	 * @return response
 	 */
 
-	public es.upm.fi.sos.t3.usermanagement.Response login(
-			es.upm.fi.sos.t3.usermanagement.User user) {
+	public Response login(
+			User user) {
 		// TODO : fill this with the necessary business logic
 		throw new java.lang.UnsupportedOperationException("Please implement "
 				+ this.getClass().getName() + "#login");
@@ -45,8 +45,8 @@ public class UserManagementWSSkeleton {
 	 * @return response2
 	 */
 
-	public es.upm.fi.sos.t3.usermanagement.Response addUser(
-			es.upm.fi.sos.t3.usermanagement.User user1) {
+	public Response addUser(
+			User user1) {
 		// TODO : fill this with the necessary business logic
 		throw new java.lang.UnsupportedOperationException("Please implement "
 				+ this.getClass().getName() + "#addUser");
@@ -59,8 +59,8 @@ public class UserManagementWSSkeleton {
 	 * @return response3
 	 */
 
-	public es.upm.fi.sos.t3.usermanagement.Response changePassword(
-			es.upm.fi.sos.t3.usermanagement.PasswordPair passwordPair) {
+	public Response changePassword(
+			PasswordPair passwordPair) {
 		// TODO : fill this with the necessary business logic
 		throw new java.lang.UnsupportedOperationException("Please implement "
 				+ this.getClass().getName() + "#changePassword");
@@ -73,8 +73,8 @@ public class UserManagementWSSkeleton {
 	 * @return response4
 	 */
 
-	public es.upm.fi.sos.t3.usermanagement.Response removeUser(
-			es.upm.fi.sos.t3.usermanagement.Username username) {
+	public Response removeUser(
+			Username username) {
 		// TODO : fill this with the necessary business logic
 		throw new java.lang.UnsupportedOperationException("Please implement "
 				+ this.getClass().getName() + "#removeUser");
