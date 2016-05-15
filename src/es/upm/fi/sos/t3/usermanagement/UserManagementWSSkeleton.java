@@ -6,10 +6,39 @@
  */
 package es.upm.fi.sos.t3.usermanagement;
 
+import java.util.List;
+
+import org.apache.axis2.AxisFault;
+import org.apache.axis2.context.ServiceContext;
+import org.apache.axis2.description.AxisService;
+
 /**
  * UserManagementWSSkeleton java skeleton for the axisService
  */
+
+/*
+ * En el ejemplo servicelifecycle de Axis2 hay una clase UserList
+ */
+
 public class UserManagementWSSkeleton {
+
+	private List<User> allUsers;
+	private List<User> loggedUsers;
+
+	// Métodos para el manejo de la sesión
+	public void init(ServiceContext serviceContext) throws AxisFault {
+		AxisService service = serviceContext.getAxisService();
+		// Las dos siguientes líneas serán algo parecido a lo que hay
+		this.allUsers = (List<User>) service.getParameterValue("users");
+		this.loggedUsers = (List<User>) service.getParameterValue("loggedUsers");
+	}
+	
+	public void destroy(ServiceContext serviceContext) throws AxisFault {
+		AxisService service = serviceContext.getAxisService();
+		// Las dos siguientes líneas serán algo parecido a lo que hay
+		service.addParameter("users", this.allUsers);
+		service.addParameter("loggedUsers", this.loggedUsers);
+	}
 
 	/**
 	 * Auto generated method signature
