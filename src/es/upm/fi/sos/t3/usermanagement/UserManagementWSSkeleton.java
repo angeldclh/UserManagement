@@ -6,7 +6,10 @@
  */
 package es.upm.fi.sos.t3.usermanagement;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.axis2.AxisFault;
 import org.apache.axis2.context.ServiceContext;
@@ -22,15 +25,22 @@ import org.apache.axis2.description.AxisService;
 
 public class UserManagementWSSkeleton {
 
-	private List<User> allUsers;
-	private List<User> loggedUsers;
+	private Map<String,User> allUsers;
+	private Map<String,User> loggedUsers;
 
+	
+	public UserManagementWSSkeleton(){
+		this.allUsers = new HashMap<String,User>();
+		this.loggedUsers = new HashMap<String,User>();
+	}
+
+	
 	// Métodos para el manejo de la sesión
 	public void init(ServiceContext serviceContext) throws AxisFault {
 		AxisService service = serviceContext.getAxisService();
 		// Las dos siguientes líneas serán algo parecido a lo que hay
-		this.allUsers = (List<User>) service.getParameterValue("users");
-		this.loggedUsers = (List<User>) service.getParameterValue("loggedUsers");
+		this.allUsers = (Map<String,User>) service.getParameterValue("users");
+		this.loggedUsers = (Map<String,User>) service.getParameterValue("loggedUsers");
 	}
 	
 	public void destroy(ServiceContext serviceContext) throws AxisFault {
@@ -64,8 +74,8 @@ public class UserManagementWSSkeleton {
 
 	public Response login(User user) {
 		Response resp = new Response();
-		if (this.allUsers.contains(user)){ //user existe
-			this.loggedUsers.add(user);
+		if (this.allUsers.containsValue(user)){ //user existe
+			this.loggedUsers.put(user.getName(), user);
 			resp.setResponse(true);
 		}
 		else

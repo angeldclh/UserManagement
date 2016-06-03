@@ -4,6 +4,8 @@
 	IST) -->
 <serviceGroup> 
 	<service name="UserManagementWS" scope="soap-session">
+		<!-- las sesiones duran 5 minutos (300000 ms) -->
+		<ConfigContextTimeoutInterval>300000</ConfigContextTimeoutInterval>
 		<messageReceivers>
 			<messageReceiver mep="http://www.w3.org/ns/wsdl/in-out"
 				class="es.upm.fi.sos.t3.usermanagement.UserManagementWSMessageReceiverInOut" />
