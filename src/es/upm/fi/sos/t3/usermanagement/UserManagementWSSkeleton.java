@@ -6,14 +6,11 @@
  */
 package es.upm.fi.sos.t3.usermanagement;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.axis2.AxisFault;
 import org.apache.axis2.context.ServiceContext;
-import org.apache.axis2.description.AxisService;
 
 /**
  * UserManagementWSSkeleton java skeleton for the axisService
@@ -74,7 +71,8 @@ public class UserManagementWSSkeleton {
 
 	public Response login(User user) {
 		Response resp = new Response();
-		if (this.allUsers.containsValue(user)){ //user existe
+		User user2 = this.allUsers.get(user.getName());
+		if (user2 != null && user2.getPwd().equals(user.getPwd())){ //user existe y password correcta
 //			this.loggedUsers.put(user.getName(), user);
 			this.loggedUser = user;
 			resp.setResponse(true);
