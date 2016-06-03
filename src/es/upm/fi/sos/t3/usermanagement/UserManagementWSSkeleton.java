@@ -26,28 +26,33 @@ import org.apache.axis2.description.AxisService;
 public class UserManagementWSSkeleton {
 
 	private Map<String,User> allUsers;
-	private Map<String,User> loggedUsers;
-
+//	private Map<String,User> loggedUsers;
+	User loggedUser;
 	
 	public UserManagementWSSkeleton(){
 		this.allUsers = new HashMap<String,User>();
-		this.loggedUsers = new HashMap<String,User>();
+		User superuser = new User();
+		superuser.setName("admin");
+		superuser.setPwd("admin");
+		this.allUsers.put(superuser.getName(), superuser);
+		//this.loggedUsers = new HashMap<String,User>();
+		this.loggedUser = null;
 	}
 
 	
 	// Métodos para el manejo de la sesión
 	public void init(ServiceContext serviceContext) throws AxisFault {
-		AxisService service = serviceContext.getAxisService();
+//		AxisService service = serviceContext.getAxisService();
 		// Las dos siguientes líneas serán algo parecido a lo que hay
-		this.allUsers = (Map<String,User>) service.getParameterValue("users");
-		this.loggedUsers = (Map<String,User>) service.getParameterValue("loggedUsers");
+//		this.allUsers = (Map<String,User>) service.getParameterValue("users");
+//		this.loggedUsers = (Map<String,User>) service.getParameterValue("loggedUsers");
 	}
 	
 	public void destroy(ServiceContext serviceContext) throws AxisFault {
-		AxisService service = serviceContext.getAxisService();
+//		AxisService service = serviceContext.getAxisService();
 		// Las dos siguientes líneas serán algo parecido a lo que hay
-		service.addParameter("users", this.allUsers);
-		service.addParameter("loggedUsers", this.loggedUsers);
+//		service.addParameter("users", this.allUsers);
+//		service.addParameter("loggedUsers", this.loggedUsers);
 	}
 
 	/**
@@ -56,13 +61,8 @@ public class UserManagementWSSkeleton {
 	 * @return
 	 */
 
-	public void logout(
-
-	) {
-		// TODO : fill this with the necessary business logic
-		// Obtener la sesión
-		// Cerrarla
-
+	public void logout() {
+		this.loggedUser = null;
 	}
 
 	/**
@@ -75,7 +75,8 @@ public class UserManagementWSSkeleton {
 	public Response login(User user) {
 		Response resp = new Response();
 		if (this.allUsers.containsValue(user)){ //user existe
-			this.loggedUsers.put(user.getName(), user);
+//			this.loggedUsers.put(user.getName(), user);
+			this.loggedUser = user;
 			resp.setResponse(true);
 		}
 		else
