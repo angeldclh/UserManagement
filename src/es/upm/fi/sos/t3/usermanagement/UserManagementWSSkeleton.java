@@ -22,34 +22,42 @@ import org.apache.axis2.context.ServiceContext;
 
 public class UserManagementWSSkeleton {
 
-	private Map<String,User> allUsers;
+	private static Map<String,User> allUsers = new HashMap<String,User>();
 //	private Map<String,User> loggedUsers;
-	User loggedUser;
+	private static User loggedUser;
 	
 	public UserManagementWSSkeleton(){
-		this.allUsers = new HashMap<String,User>();
 		User superuser = new User();
 		superuser.setName("admin");
 		superuser.setPwd("admin");
-		this.allUsers.put(superuser.getName(), superuser);
-		//this.loggedUsers = new HashMap<String,User>();
-		this.loggedUser = null;
+		allUsers.put(superuser.getName(), superuser);
+		//loggedUsers = new HashMap<String,User>();
 	}
 
 	
+	
+	public String verUsuarios(){
+		String res="\n";
+		for(User u : allUsers.values())
+			res+=u.getName() + "\n";
+		return res;
+	}
+
+
+
 	// Métodos para el manejo de la sesión
 	public void init(ServiceContext serviceContext) throws AxisFault {
 //		AxisService service = serviceContext.getAxisService();
 		// Las dos siguientes líneas serán algo parecido a lo que hay
-//		this.allUsers = (Map<String,User>) service.getParameterValue("users");
-//		this.loggedUsers = (Map<String,User>) service.getParameterValue("loggedUsers");
+//		allUsers = (Map<String,User>) service.getParameterValue("users");
+//		loggedUsers = (Map<String,User>) service.getParameterValue("loggedUsers");
 	}
 	
 	public void destroy(ServiceContext serviceContext) throws AxisFault {
 //		AxisService service = serviceContext.getAxisService();
 		// Las dos siguientes líneas serán algo parecido a lo que hay
-//		service.addParameter("users", this.allUsers);
-//		service.addParameter("loggedUsers", this.loggedUsers);
+//		service.addParameter("users", allUsers);
+//		service.addParameter("loggedUsers", loggedUsers);
 	}
 
 	/**
@@ -59,7 +67,7 @@ public class UserManagementWSSkeleton {
 	 */
 
 	public void logout() {
-		this.loggedUser = null;
+		loggedUser = null;
 	}
 
 	/**
@@ -71,15 +79,16 @@ public class UserManagementWSSkeleton {
 
 	public Response login(User user) {
 		Response resp = new Response();
-		User user2 = this.allUsers.get(user.getName());
+		
+		User user2 = allUsers.get(user.getName());
 		if (user2 != null && user2.getPwd().equals(user.getPwd())){ //user existe y password correcta
-//			this.loggedUsers.put(user.getName(), user);
-			this.loggedUser = user;
+//			loggedUsers.put(user.getName(), user);
+			loggedUser = user;
 			resp.setResponse(true);
 		}
-		else
+		else{
 			resp.setResponse(false);
-		
+		}
 		return resp;
 		
 	}
@@ -97,14 +106,14 @@ public class UserManagementWSSkeleton {
 
 	public Response addUser(User user1) {
 		Response resp = new Response();
-		if (this.loggedUser.getName().equals("admin") &&
-				!this.allUsers.containsKey(user1.getName())){
-			this.allUsers.put(user1.getName(), user1);
+		if (loggedUser.getName().equals("admin") &&
+				!allUsers.containsKey(user1.getName())){
+			allUsers.put(user1.getName(), user1);
 			resp.setResponse(true);
 		}
-		else
+		else{
 			resp.setResponse(false);
-		
+		}	
 		return resp;
 	}
 
@@ -117,8 +126,8 @@ public class UserManagementWSSkeleton {
 
 	public Response changePassword(PasswordPair passwordPair) {
 		Response resp = new Response();
-		if(this.loggedUser.getPwd().equals(passwordPair.getOldpwd())){
-			this.loggedUser.setPwd(passwordPair.getNewpwd());
+		if(loggedUser.getPwd().equals(passwordPair.getOldpwd())){
+			loggedUser.setPwd(passwordPair.getNewpwd());
 			resp.setResponse(true);
 		}
 		else
@@ -136,9 +145,9 @@ public class UserManagementWSSkeleton {
 
 	public Response removeUser(Username username) {
 		Response resp = new Response();
-		if (this.loggedUser.getName().equals("admin") &&
-				this.allUsers.containsKey(username.getUsername())){
-			this.allUsers.remove(username.getUsername());
+		if (loggedUser.getName().equals("admin") &&
+				allUsers.containsKey(username.getUsername())){
+			allUsers.remove(username.getUsername());
 			resp.setResponse(true);
 		}
 		else
@@ -146,5 +155,7 @@ public class UserManagementWSSkeleton {
 		
 		return resp;
 	}
+	
+	
 
 }
