@@ -98,12 +98,16 @@ public class UserManagementWSSkeleton {
 	 */
 
 	public Response addUser(User user1) {
-		// TODO : fill this with the necessary business logic
-		// Ver que la sesión es de superuser
-		// Añadirlo
-		// true
-		throw new java.lang.UnsupportedOperationException("Please implement "
-				+ this.getClass().getName() + "#addUser");
+		Response resp = new Response();
+		if (this.loggedUser.getName().equals("admin") &&
+				!this.allUsers.containsKey(user1.getName())){
+			this.allUsers.put(user1.getName(), user1);
+			resp.setResponse(true);
+		}
+		else
+			resp.setResponse(false);
+		
+		return resp;
 	}
 
 	/**
@@ -114,13 +118,15 @@ public class UserManagementWSSkeleton {
 	 */
 
 	public Response changePassword(PasswordPair passwordPair) {
-		// TODO : fill this with the necessary business logic
-		// Obtener User al que pertenece la sesión actual
-		// Ver que la pswd actual coincide con la primera del pair
-		// Cambiarla
-		// True
-		throw new java.lang.UnsupportedOperationException("Please implement "
-				+ this.getClass().getName() + "#changePassword");
+		Response resp = new Response();
+		if(this.loggedUser.getPwd().equals(passwordPair.getOldpwd())){
+			this.loggedUser.setPwd(passwordPair.getNewpwd());
+			resp.setResponse(true);
+		}
+		else
+			resp.setResponse(false);
+		
+		return resp;
 	}
 
 	/**
@@ -131,13 +137,16 @@ public class UserManagementWSSkeleton {
 	 */
 
 	public Response removeUser(Username username) {
-		// TODO : fill this with the necessary business logic
-		// Ver que la sesión es de superuser
-		// Ver que un user con username existe
-		// Borrar ese User
-		// True
-		throw new java.lang.UnsupportedOperationException("Please implement "
-				+ this.getClass().getName() + "#removeUser");
+		Response resp = new Response();
+		if (this.loggedUser.getName().equals("admin") &&
+				this.allUsers.containsKey(username.getUsername())){
+			this.allUsers.remove(username.getUsername());
+			resp.setResponse(true);
+		}
+		else
+			resp.setResponse(false);
+		
+		return resp;
 	}
 
 }
