@@ -63,12 +63,16 @@ public class UserManagementWSSkeleton {
 	 */
 
 	public Response login(User user) {
-		// TODO : fill this with the necessary business logic
-		// Ver que user existe (¿CÓMO?)
-		// Crear la sesión (ContextSession creo)
-		// Devolver true en la Response
-		throw new java.lang.UnsupportedOperationException("Please implement "
-				+ this.getClass().getName() + "#login");
+		Response resp = new Response();
+		if (this.allUsers.contains(user)){ //user existe
+			this.loggedUsers.add(user);
+			resp.setResponse(true);
+		}
+		else
+			resp.setResponse(false);
+		
+		return resp;
+		
 	}
 
 	/*
