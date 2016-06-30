@@ -3,7 +3,7 @@
 <!-- by the Apache Axis2 version: 1.6.2 Built on : Apr 17, 2012 (05:33:49 
 	IST) -->
 <serviceGroup> 
-	<service name="UserManagementWS" scope="soap-session">
+	<service name="UserManagementWS" scope="soapsession">
 		<!-- las sesiones duran 5 minutos (300000 ms) -->
 		<ConfigContextTimeoutInterval>300000</ConfigContextTimeoutInterval>
 		<messageReceivers>

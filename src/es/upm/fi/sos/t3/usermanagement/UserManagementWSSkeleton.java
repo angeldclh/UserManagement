@@ -9,55 +9,24 @@ package es.upm.fi.sos.t3.usermanagement;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.axis2.AxisFault;
-import org.apache.axis2.context.ServiceContext;
-
 /**
  * UserManagementWSSkeleton java skeleton for the axisService
  */
 
-/*
- * En el ejemplo servicelifecycle de Axis2 hay una clase UserList
- */
 
 public class UserManagementWSSkeleton {
 
-	private static Map<String,User> allUsers = new HashMap<String,User>();
-//	private Map<String,User> loggedUsers;
-	private static User loggedUser;
-	
-	public UserManagementWSSkeleton(){
-		User superuser = new User();
-		superuser.setName("admin");
-		superuser.setPwd("admin");
-		allUsers.put(superuser.getName(), superuser);
-		//loggedUsers = new HashMap<String,User>();
-	}
+	private static Map<String, User> allUsers = new HashMap<String, User>();
+	private User loggedUser;
+	private static User superuser = new User();
 
-	
-	
-	public String verUsuarios(){
-		String res="\n";
-		for(User u : allUsers.values())
-			res+=u.getName() + "\n";
-		return res;
-	}
-
-
-
-	// Métodos para el manejo de la sesión
-	public void init(ServiceContext serviceContext) throws AxisFault {
-//		AxisService service = serviceContext.getAxisService();
-		// Las dos siguientes líneas serán algo parecido a lo que hay
-//		allUsers = (Map<String,User>) service.getParameterValue("users");
-//		loggedUsers = (Map<String,User>) service.getParameterValue("loggedUsers");
-	}
-	
-	public void destroy(ServiceContext serviceContext) throws AxisFault {
-//		AxisService service = serviceContext.getAxisService();
-		// Las dos siguientes líneas serán algo parecido a lo que hay
-//		service.addParameter("users", allUsers);
-//		service.addParameter("loggedUsers", loggedUsers);
+	// Añadir administrador (solo 1 vez)
+	public UserManagementWSSkeleton() {
+		if (!allUsers.containsKey("admin")) {
+			superuser.setName("admin");
+			superuser.setPwd("admin");
+			allUsers.put("admin", superuser);
+		}
 	}
 
 	/**
@@ -67,7 +36,7 @@ public class UserManagementWSSkeleton {
 	 */
 
 	public void logout() {
-		loggedUser = null;
+		this.loggedUser = null;
 	}
 
 	/**
@@ -79,23 +48,22 @@ public class UserManagementWSSkeleton {
 
 	public Response login(User user) {
 		Response resp = new Response();
-		
-		User user2 = allUsers.get(user.getName());
-		if (user2 != null && user2.getPwd().equals(user.getPwd())){ //user existe y password correcta
-//			loggedUsers.put(user.getName(), user);
-			loggedUser = user;
-			resp.setResponse(true);
-		}
-		else{
+		if (this.loggedUser != null) { //No se puede 2 login seguidos
 			resp.setResponse(false);
+		} else {
+			User user2 = allUsers.get(user.getName());
+			//user existe y password correcta
+			if (user2 != null && user2.getPwd().equals(user.getPwd())) { 
+				this.loggedUser = user;
+				resp.setResponse(true);
+			} else {
+				resp.setResponse(false);
+			}
 		}
 		return resp;
-		
+
 	}
 
-	/*
-	 * Los siguientes métodos tendrán que usar getSession() o algo parecido
-	 */
 
 	/**
 	 * Auto generated method signature
@@ -106,14 +74,13 @@ public class UserManagementWSSkeleton {
 
 	public Response addUser(User user1) {
 		Response resp = new Response();
-		if (loggedUser.getName().equals("admin") &&
-				!allUsers.containsKey(user1.getName())){
+		if (this.loggedUser != null && this.loggedUser.getName().equals("admin")
+				&& !allUsers.containsKey(user1.getName())) {
 			allUsers.put(user1.getName(), user1);
 			resp.setResponse(true);
-		}
-		else{
+		} else {
 			resp.setResponse(false);
-		}	
+		}
 		return resp;
 	}
 
@@ -126,13 +93,12 @@ public class UserManagementWSSkeleton {
 
 	public Response changePassword(PasswordPair passwordPair) {
 		Response resp = new Response();
-		if(loggedUser.getPwd().equals(passwordPair.getOldpwd())){
-			loggedUser.setPwd(passwordPair.getNewpwd());
+		if (this.loggedUser != null && this.loggedUser.getPwd().equals(passwordPair.getOldpwd())) {
+			this.loggedUser.setPwd(passwordPair.getNewpwd());
 			resp.setResponse(true);
-		}
-		else
+		} else
 			resp.setResponse(false);
-		
+
 		return resp;
 	}
 
@@ -145,17 +111,14 @@ public class UserManagementWSSkeleton {
 
 	public Response removeUser(Username username) {
 		Response resp = new Response();
-		if (loggedUser.getName().equals("admin") &&
-				allUsers.containsKey(username.getUsername())){
+		if (this.loggedUser != null && this.loggedUser.getName().equals("admin")
+				&& allUsers.containsKey(username.getUsername())) {
 			allUsers.remove(username.getUsername());
 			resp.setResponse(true);
-		}
-		else
+		} else
 			resp.setResponse(false);
-		
+
 		return resp;
 	}
-	
-	
 
 }
